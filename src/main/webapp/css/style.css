@@ -1,0 +1,619 @@
+/* ===
+   WeddingHall Booking System — Main Stylesheet
+   ============================================================
+   Table of Contents:
+   1.  Fonts & CSS Variables
+   2.  Reset & Base
+   3.  Navbar  (fixed, z-index 500)
+   4.  Page Shell & Dashboard Layout
+   5.  Sidebar  (fixed, starts flush below navbar)
+   6.  Sidebar Overlay & Hamburger (mobile)
+   7.  Main Content Area
+   8.  Hero Section
+   9.  Buttons
+   10. Search Bar
+   11. Cards & Hall Grid
+   12. Stat Cards
+   13. Tables
+   14. Forms
+   15. Alerts & Badges
+   16. Detail View
+   17. Auth Pages
+   18. Hall Detail Page
+   19. Footer
+   20. Utilities
+   21. Responsive
+   ============================================================ */
+
+
+/* ─── 1. Fonts & CSS Variables ───────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Serif+Display&family=Lora:wght@500;600&display=swap');
+
+:root {
+    /* Brand colours */
+    --primary:        #8B1A4A;
+    --primary-dark:   #6a1238;
+    --primary-mid:    #7a1540;
+    --secondary:      #D4AF37;
+    --accent:         #F5E6D3;
+
+    /* Semantic */
+    --success:        #28a745;
+    --danger:         #dc3545;
+    --warning:        #ffc107;
+    --info:           #17a2b8;
+
+    /* Neutral */
+    --dark:           #1e1e2e;
+    --light:          #f8f9fa;
+    --gray:           #6c757d;
+    --border:         #dee2e6;
+    --shadow:         0 2px 12px rgba(0, 0, 0, 0.08);
+
+    /* Gold */
+    --gold:           #C4974A;
+    --gold-light:     #E8C87A;
+
+    /* Navbar */
+    --nav-height:     58px;
+    --nav-bg:         #FAF8F5;
+    --nav-border:     #E8E0D5;
+
+    /* Sidebar */
+    --sb-width:       228px;
+    --sb-bg:          #1C1A18;
+    --sb-border:      rgba(255, 255, 255, 0.07);
+    --sb-text:        #C8C0B8;
+    --sb-muted:       #6B6460;
+    --sb-hover-bg:    rgba(255, 255, 255, 0.06);
+    --sb-active-bg:   rgba(196, 151, 74, 0.12);
+
+    /* Typography */
+    --font-sans:      'DM Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-serif:     'DM Serif Display', 'Lora', serif;
+
+    /* Page */
+    --page-bg:        #F0EDE8;
+}
+
+
+/* ─── 2. Reset & Base ────────────────────────────────────── */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: var(--font-sans);
+    color: var(--dark);
+    background: var(--page-bg);
+    line-height: 1.5;
+    overflow-x: hidden;
+}
+
+a { text-decoration: none; color: var(--primary); transition: color 0.15s; }
+a:hover { color: var(--primary-dark); }
+img { max-width: 100%; display: block; }
+
+
+/* ─── 3. Navbar ──────────────────────────────────────────── */
+/*
+   Fixed to the top of the viewport. z-index 500 keeps it above
+   the fixed sidebar (z-index 400) on desktop.
+   The left padding on desktop accounts for the sidebar so content
+   doesn't hide behind it.
+*/
+
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 500;
+    height: var(--nav-height);
+    background: var(--nav-bg);
+    border-bottom: 1px solid var(--nav-border);
+    display: flex;
+    align-items: center;
+    padding: 0 28px 0 calc(var(--sb-width) + 20px);
+    gap: 16px;
+}
+
+.navbar-brand {
+    display: flex; align-items: center; gap: 10px;
+    margin-right: auto; color: var(--dark);
+}
+.brand-ring {
+    width: 30px; height: 30px;
+    border: 1.5px solid var(--gold); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold); flex-shrink: 0;
+}
+.brand-name { font-family: var(--font-serif); font-size: 16px; color: var(--dark); letter-spacing: 0.01em; white-space: nowrap; }
+.brand-name span { color: var(--gold); }
+
+.nav-links { display: flex; align-items: center; gap: 2px; list-style: none; }
+.nav-links li a {
+    font-size: 13px; font-weight: 400; color: var(--gray);
+    padding: 6px 12px; border-radius: 6px;
+    transition: color 0.15s, background 0.15s;
+    display: flex; align-items: center; white-space: nowrap;
+}
+.nav-links li a:hover { color: var(--dark); background: #F2EDE6; }
+
+.btn-nav { background: var(--dark) !important; color: var(--nav-bg) !important; font-weight: 500 !important; border-radius: 6px; }
+.btn-nav:hover { background: #333 !important; color: var(--nav-bg) !important; }
+
+.nav-bell-link { padding: 0 !important; background: transparent !important; }
+.nav-bell {
+    position: relative; width: 34px; height: 34px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 8px; color: var(--gray);
+    transition: background 0.15s, color 0.15s;
+}
+.nav-bell:hover { background: #F2EDE6; color: var(--dark); }
+.nav-badge {
+    position: absolute; top: 5px; right: 5px;
+    width: 7px; height: 7px;
+    background: var(--gold); border-radius: 50%;
+    border: 1.5px solid var(--nav-bg);
+}
+
+/* ── Hamburger button (hidden on desktop) ── */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 36px; height: 36px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    padding: 6px;
+    transition: background 0.15s;
+    flex-shrink: 0;
+    order: -1; /* sits left of brand on mobile */
+}
+.hamburger:hover { background: #F2EDE6; }
+.hamburger span {
+    display: block;
+    width: 20px; height: 2px;
+    background: var(--dark); border-radius: 2px;
+    transition: transform 0.25s, opacity 0.25s;
+    transform-origin: center;
+}
+
+/* Animate to X when open */
+body.sidebar-open .hamburger span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+body.sidebar-open .hamburger span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+body.sidebar-open .hamburger span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+
+/* ─── 4. Page Shell & Dashboard Layout ───────────────────── */
+/*
+   .page-shell  → body wrapper, pushed down below the fixed navbar
+   .dashboard-layout → single column, offset left by sidebar width
+                        (the sidebar itself is fixed, not in flow)
+*/
+
+.page-shell {
+    margin-top: var(--nav-height);
+    min-height: calc(100vh - var(--nav-height));
+}
+
+.dashboard-layout {
+    margin-left: var(--sb-width); /* leave room for the fixed sidebar */
+    min-height: calc(100vh - var(--nav-height));
+}
+
+
+/* ─── 5. Sidebar ─────────────────────────────────────────── */
+/*
+   position: fixed is the ONLY reliable way to pin the sidebar
+   flush to the navbar bottom on all JSP page structures.
+
+   position: sticky fails when any ancestor element has
+   overflow: hidden, overflow: auto, or a fixed height —
+   all common in Java EE / JSP layouts. Fixed removes it from
+   document flow entirely and anchors it to the viewport.
+
+     top: var(--nav-height) → starts exactly at navbar bottom (0 gap)
+     left: 0               → flush with left viewport edge
+     height: calc(...)     → fills exactly the remaining viewport
+*/
+
+.sidebar {
+    position: fixed;
+    top: var(--nav-height);
+    left: 0;
+    width: var(--sb-width);
+    height: calc(100vh - var(--nav-height));
+    z-index: 400;
+    background: var(--sb-bg);
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--sb-border);
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(196, 151, 74, 0.18) transparent;
+    /* Slide transition used on mobile */
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.sidebar::-webkit-scrollbar { width: 3px; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(196, 151, 74, 0.2); border-radius: 3px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+
+/* Brand strip */
+.sidebar-brand {
+    padding: 20px 20px 16px;
+    border-bottom: 1px solid var(--sb-border);
+    display: flex; align-items: center; gap: 11px; flex-shrink: 0;
+}
+.sidebar-brand-mark {
+    width: 30px; height: 30px;
+    border: 1px solid rgba(196, 151, 74, 0.4); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.sidebar-brand-mark svg { width: 14px; height: 14px; fill: var(--gold); }
+.sidebar-brand-text { display: flex; flex-direction: column; gap: 2px; }
+.sidebar-brand-text strong { font-family: var(--font-serif); font-size: 13.5px; font-weight: 400; color: #F0EAE2; letter-spacing: 0.01em; }
+.sidebar-brand-text span   { font-size: 10px; color: var(--sb-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* User block */
+.sidebar-user {
+    padding: 14px 20px; border-bottom: 1px solid var(--sb-border);
+    display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+}
+.avatar {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--gold), #8A6630);
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600; color: #FAF3E8; flex-shrink: 0;
+    border: 1px solid rgba(196, 151, 74, 0.28);
+}
+.sidebar-user-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.user-name { font-size: 12.5px; font-weight: 500; color: #E8E0D5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; }
+.user-role { font-size: 10.5px; color: var(--sb-muted); letter-spacing: 0.04em; }
+
+/* Nav list */
+.sidebar-nav {
+    list-style: none; padding: 8px 10px 20px; margin: 0;
+    flex: 1; display: flex; flex-direction: column; gap: 1px;
+}
+.sidebar-nav .nav-section {
+    font-size: 9.5px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--sb-muted); padding: 14px 10px 5px;
+    font-weight: 500; user-select: none; line-height: 1;
+}
+.sidebar-nav li a {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7.5px 10px; border-radius: 7px;
+    font-size: 13px; font-weight: 400; color: var(--sb-text);
+    letter-spacing: 0.01em; transition: background 0.12s, color 0.12s; line-height: 1.3;
+}
+.sidebar-nav li a:hover  { background: var(--sb-hover-bg); color: #F0EAE2; }
+.sidebar-nav li a.active { background: var(--sb-active-bg); color: var(--gold-light); font-weight: 500; }
+
+.nav-icon {
+    width: 16px; height: 16px; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; opacity: 0.65; transition: opacity 0.12s;
+}
+.nav-icon svg { width: 14px; height: 14px; }
+.sidebar-nav li a:hover .nav-icon,
+.sidebar-nav li a.active .nav-icon { opacity: 1; }
+
+.nav-logout { margin-top: auto; padding-top: 6px; border-top: 1px solid var(--sb-border); }
+.nav-logout a { color: var(--sb-muted) !important; }
+.nav-logout a:hover { color: #E8A0A0 !important; background: rgba(220, 53, 69, 0.08) !important; }
+
+
+/* ─── 6. Sidebar Overlay & Hamburger (mobile) ────────────── */
+/*
+   On screens ≤ 900px:
+   • Hamburger appears in the navbar
+   • Sidebar slides in from the left (covers full height)
+   • A dark overlay covers the page behind the open sidebar
+   • Clicking the overlay closes the sidebar
+   JS required: toggle class "sidebar-open" on <body>
+*/
+
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 350;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.28s;
+}
+
+body.sidebar-open .sidebar-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ─── 7. Main Content Area ───────────────────────────────── */
+
+.main-content {
+    padding: 28px 30px;
+    background: var(--page-bg);
+    min-height: calc(100vh - var(--nav-height));
+}
+
+.page-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
+}
+.page-header h1 { font-size: 1.55rem; font-weight: 600; color: var(--dark); font-family: var(--font-serif); line-height: 1.2; }
+.breadcrumb { font-size: 0.8rem; color: var(--gray); display: flex; gap: 5px; align-items: center; margin-top: 4px; flex-wrap: wrap; }
+.breadcrumb span { opacity: 0.45; }
+
+.container   { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+.page-wrapper { padding: 28px 20px; }
+.section     { padding: 50px 20px; }
+.section-title { text-align: center; font-size: 1.9rem; font-weight: 600; color: var(--primary); margin-bottom: 10px; font-family: var(--font-serif); }
+.section-sub { text-align: center; color: var(--gray); margin-bottom: 35px; }
+
+
+/* ─── 8. Hero Section ────────────────────────────────────── */
+
+.hero {
+    background: linear-gradient(135deg, var(--primary) 0%, #c0392b 50%, var(--primary-dark) 100%);
+    color: white; text-align: center; padding: 80px 20px 60px;
+    position: relative; overflow: hidden;
+}
+.hero::before {
+    content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.hero-content { position: relative; max-width: 700px; margin: 0 auto; }
+.hero h1 { font-size: 2.8rem; font-weight: 600; margin-bottom: 1rem; font-family: var(--font-serif); }
+.hero p  { font-size: 1.1rem; opacity: 0.88; margin-bottom: 2rem; }
+.hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+
+/* ─── 9. Buttons ─────────────────────────────────────────── */
+
+.btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 9px 22px; border-radius: 6px; font-weight: 600; font-size: 0.9rem;
+    cursor: pointer; border: 1.5px solid transparent;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    font-family: var(--font-sans); white-space: nowrap;
+}
+.btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+.btn-primary   { background: var(--primary);   color: white; border-color: var(--primary); }
+.btn-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); color: white; }
+.btn-secondary { background: var(--secondary); color: var(--dark); border-color: var(--secondary); }
+.btn-secondary:hover { background: #b8960c; color: white; border-color: #b8960c; }
+.btn-outline   { background: transparent; color: var(--primary); border-color: var(--primary); }
+.btn-outline:hover { background: var(--primary); color: white; }
+.btn-success   { background: var(--success); color: white; border-color: var(--success); }
+.btn-success:hover { background: #218838; border-color: #218838; color: white; }
+.btn-danger    { background: var(--danger); color: white; border-color: var(--danger); }
+.btn-danger:hover { background: #c82333; border-color: #c82333; color: white; }
+.btn-warning   { background: var(--warning); color: var(--dark); border-color: var(--warning); }
+.btn-info      { background: var(--info); color: white; border-color: var(--info); }
+.btn-white     { background: white; color: var(--primary); border-color: white; }
+.btn-white:hover { background: var(--accent); }
+.btn-sm { padding: 5px 13px; font-size: 0.8rem; }
+.btn-lg { padding: 12px 30px; font-size: 1rem; }
+
+
+/* ─── 10. Search Bar ─────────────────────────────────────── */
+
+.search-section {
+    background: white; padding: 22px 28px; border-radius: 12px;
+    box-shadow: var(--shadow); margin: -30px auto 40px;
+    max-width: 900px; position: relative; z-index: 10;
+}
+.search-form { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 12px; align-items: end; }
+.search-form .form-group { margin: 0; }
+
+
+/* ─── 11. Cards & Hall Grid ──────────────────────────────── */
+
+.card { background: white; border-radius: 10px; box-shadow: var(--shadow); overflow: hidden; transition: transform 0.18s, box-shadow 0.18s; }
+.card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+.card-img { width: 100%; height: 200px; object-fit: cover; background: linear-gradient(135deg, var(--accent), #e8d5c4); display: flex; align-items: center; justify-content: center; font-size: 4rem; }
+.card-body  { padding: 20px; }
+.card-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 6px; color: var(--dark); }
+.card-text  { color: var(--gray); font-size: 0.88rem; margin-bottom: 8px; }
+.card-footer { padding: 14px 20px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: var(--light); }
+
+.halls-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px; }
+.hall-card .price    { font-size: 1.15rem; font-weight: 700; color: var(--primary); }
+.hall-card .capacity { font-size: 0.84rem; color: var(--gray); }
+.hall-card .location-tag { display: inline-flex; align-items: center; gap: 4px; background: var(--accent); color: var(--primary); padding: 3px 10px; border-radius: 20px; font-size: 0.78rem; font-weight: 600; margin-bottom: 8px; }
+.hall-card .status-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.74rem; font-weight: 600; }
+.status-available   { background: #d4edda; color: #155724; }
+.status-unavailable { background: #f8d7da; color: #721c24; }
+.status-pending     { background: #fff3cd; color: #856404; }
+.facilities-tags { display: flex; flex-wrap: wrap; gap: 5px; margin: 10px 0; }
+.facility-tag { background: var(--light); border: 1px solid var(--border); padding: 2px 8px; border-radius: 12px; font-size: 0.74rem; color: var(--gray); }
+
+
+/* ─── 12. Stat Cards ─────────────────────────────────────── */
+
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.stat-card  { background: white; border-radius: 10px; padding: 18px 20px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 14px; }
+.stat-icon  { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.stat-icon svg { width: 18px; height: 18px; }
+.stat-info .stat-value { font-size: 1.65rem; font-weight: 700; line-height: 1; font-family: var(--font-serif); }
+.stat-info .stat-label { font-size: 0.78rem; color: var(--gray); margin-top: 3px; }
+.icon-primary   { background: #f3e5f0; }
+.icon-secondary { background: #fff8e0; }
+.icon-success   { background: #e8f5e9; }
+.icon-info      { background: #e3f2fd; }
+.icon-danger    { background: #fce4ec; }
+
+
+/* ─── 13. Tables ─────────────────────────────────────────── */
+
+.table-card { background: white; border-radius: 10px; box-shadow: var(--shadow); overflow: hidden; }
+.table-card .table-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+.table-card .table-header h3 { font-size: 0.95rem; font-weight: 600; }
+table { width: 100%; border-collapse: collapse; }
+thead th { background: #faf9f7; padding: 10px 16px; text-align: left; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gray); border-bottom: 1px solid var(--border); white-space: nowrap; }
+tbody td { padding: 11px 16px; border-bottom: 1px solid #f5f3f0; font-size: 0.88rem; vertical-align: middle; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: #faf9f7; }
+
+
+/* ─── 14. Forms ──────────────────────────────────────────── */
+
+.form-card { background: white; border-radius: 10px; box-shadow: var(--shadow); padding: 28px; max-width: 700px; }
+.form-card-wide { max-width: 900px; }
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 0.86rem; color: var(--dark); }
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%; padding: 9px 13px;
+    border: 1.5px solid var(--border); border-radius: 7px;
+    font-size: 0.9rem; font-family: var(--font-sans);
+    background: white; color: var(--dark);
+    transition: border-color 0.18s, box-shadow 0.18s;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(139, 26, 74, 0.09); }
+.form-group textarea { resize: vertical; min-height: 90px; }
+.form-row   { display: grid; grid-template-columns: 1fr 1fr;     gap: 16px; }
+.form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.form-actions { display: flex; gap: 12px; margin-top: 22px; flex-wrap: wrap; }
+.form-hint { font-size: 0.78rem; color: var(--gray); margin-top: 4px; }
+
+
+/* ─── 15. Alerts & Badges ────────────────────────────────── */
+
+.alert { padding: 12px 16px; border-radius: 7px; margin-bottom: 18px; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; border-left: 3px solid transparent; }
+.alert-success { background: #d4edda; color: #155724; border-left-color: var(--success); }
+.alert-danger  { background: #f8d7da; color: #721c24; border-left-color: var(--danger); }
+.alert-warning { background: #fff3cd; color: #856404; border-left-color: var(--warning); }
+.alert-info    { background: #d1ecf1; color: #0c5460; border-left-color: var(--info); }
+
+.badge { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; }
+.badge-pending   { background: #fff3cd; color: #856404; }
+.badge-approved  { background: #d4edda; color: #155724; }
+.badge-cancelled { background: #f8d7da; color: #721c24; }
+.badge-completed { background: #d1ecf1; color: #0c5460; }
+.badge-admin     { background: #f3e5f5; color: var(--primary); }
+.badge-owner     { background: #fff8e1; color: #e65100; }
+.badge-customer  { background: #e3f2fd; color: #1565c0; }
+.badge-active    { background: #d4edda; color: #155724; }
+.badge-inactive  { background: #f8d7da; color: #721c24; }
+
+
+/* ─── 16. Detail View ────────────────────────────────────── */
+
+.detail-grid  { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.detail-item  { display: flex; flex-direction: column; }
+.detail-label { font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--gray); margin-bottom: 2px; }
+.detail-value { font-size: 0.92rem; font-weight: 600; color: var(--dark); }
+.info-panel   { background: white; border-radius: 10px; box-shadow: var(--shadow); padding: 22px; margin-bottom: 18px; }
+.info-panel h3 { font-size: 1rem; font-weight: 600; margin-bottom: 14px; color: var(--primary); border-bottom: 1.5px solid var(--accent); padding-bottom: 8px; font-family: var(--font-serif); }
+
+
+/* ─── 17. Auth Pages ─────────────────────────────────────── */
+
+.auth-page  { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); padding: 20px; }
+.auth-card  { background: white; border-radius: 14px; padding: 40px; width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,0.28); }
+.auth-logo  { text-align: center; margin-bottom: 24px; }
+.auth-logo .logo-icon { font-size: 2.5rem; }
+.auth-logo h2 { font-size: 1.4rem; color: var(--primary); font-weight: 600; margin-top: 5px; font-family: var(--font-serif); }
+.auth-logo p  { color: var(--gray); font-size: 0.88rem; margin-top: 4px; }
+.auth-footer  { text-align: center; margin-top: 20px; font-size: 0.85rem; color: var(--gray); }
+
+
+/* ─── 18. Hall Detail Page ───────────────────────────────── */
+
+.hall-detail-hero { background: linear-gradient(135deg, var(--accent) 0%, #ead5c0 100%); padding: 36px; border-radius: 10px; margin-bottom: 22px; }
+.hall-detail-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 22px; }
+
+
+/* ─── 19. Footer ─────────────────────────────────────────── */
+
+footer { background: var(--dark); color: rgba(255,255,255,0.6); text-align: center; padding: 18px; font-size: 0.84rem; }
+footer span { color: #e74c3c; }
+
+
+/* ─── 20. Utilities ──────────────────────────────────────── */
+
+.text-primary { color: var(--primary) !important; }
+.text-gray    { color: var(--gray)    !important; }
+.text-success { color: var(--success) !important; }
+.text-danger  { color: var(--danger)  !important; }
+.text-center  { text-align: center   !important; }
+.mt-1 { margin-top:    8px; }  .mt-2 { margin-top:    16px; }
+.mt-3 { margin-top:   24px; }  .mt-4 { margin-top:    32px; }
+.mb-1 { margin-bottom: 8px; }  .mb-2 { margin-bottom: 16px; }  .mb-3 { margin-bottom: 24px; }
+.flex        { display: flex; }
+.flex-center { justify-content: center; align-items: center; }
+.gap-1 { gap: 8px; }  .gap-2 { gap: 16px; }
+.w-100 { width: 100%; }
+.empty-state { text-align: center; padding: 50px 20px; color: var(--gray); }
+.empty-state .empty-icon { font-size: 3rem; margin-bottom: 12px; opacity: 0.35; }
+.empty-state p { font-size: 0.96rem; }
+
+
+/* ─── 21. Responsive ─────────────────────────────────────── */
+
+/* ── Tablet & mobile: sidebar becomes a slide-over drawer ── */
+@media (max-width: 900px) {
+    /* Navbar: remove sidebar offset, show hamburger */
+    .navbar {
+        padding: 0 16px;
+    }
+    .hamburger { display: flex; }
+
+    /* Dashboard layout: no left margin — sidebar is overlaid */
+    .dashboard-layout {
+        margin-left: 0;
+    }
+
+    /* Sidebar: hidden off-screen to the left by default */
+    .sidebar {
+        top: 0;
+        height: 100vh;
+        z-index: 600;                    /* above navbar on mobile */
+        transform: translateX(-100%);
+    }
+
+    /* Open state */
+    body.sidebar-open .sidebar {
+        transform: translateX(0);
+    }
+
+    /* Prevent body scroll when sidebar is open */
+    body.sidebar-open {
+        overflow: hidden;
+    }
+
+    .search-form      { grid-template-columns: 1fr 1fr; }
+    .hall-detail-grid { grid-template-columns: 1fr; }
+    .main-content     { padding: 20px; }
+}
+
+/* ── Mobile ── */
+@media (max-width: 600px) {
+    .hero h1          { font-size: 1.75rem; }
+    .search-form      { grid-template-columns: 1fr; }
+    .form-row,
+    .form-row-3       { grid-template-columns: 1fr; }
+    .halls-grid       { grid-template-columns: 1fr; }
+    .stats-grid       { grid-template-columns: 1fr 1fr; }
+    .detail-grid      { grid-template-columns: 1fr; }
+    .main-content     { padding: 16px; }
+    .auth-card        { padding: 28px 20px; }
+    .hall-detail-grid { grid-template-columns: 1fr; }
+}
